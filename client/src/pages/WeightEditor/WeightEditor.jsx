@@ -11,7 +11,9 @@ import {
   Button,
   Alert,
 } from "@mui/material";
-import { fetchUserWeights,updateUserWeights } from "../services/services";
+import { fetchUserWeights, updateUserWeights } from "../services/services";
+import { motion } from "framer-motion";
+import "./WeightEditor.css";
 
 const WeightEditor = () => {
   const [weightsData, setWeightsData] = useState({});
@@ -77,27 +79,34 @@ const WeightEditor = () => {
 
   return (
     <Box p={4}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h6" gutterBottom>
+      <motion.div
+        className="weight-card"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 80, damping: 18 }}
+      >
+        <Typography variant="h5" className="weight-title" gutterBottom>
           Role-Based Weight Configuration
         </Typography>
-
+        <Typography variant="subtitle1" className="weight-subtitle" gutterBottom>
+          Configure the importance of each category for different roles. Weights must sum to 100.
+        </Typography>
         {message && (
           <Alert severity={message.type} sx={{ mb: 2 }}>
             {message.text}
           </Alert>
         )}
-
-        <Box display="flex" gap={4} mt={2}>
+        <Box display="flex" gap={4} mt={2} flexWrap="wrap">
           {/* Role Selection */}
-          <Box flex={1}>
-            <FormControl fullWidth>
+          <Box flex={1} >
+            <FormControl className="weight-select-control">
               <InputLabel id="role-select-label">Select Role</InputLabel>
               <Select
                 labelId="role-select-label"
                 value={selectedRole}
                 label="Select Role"
                 onChange={handleRoleChange}
+                className="weight-select"
               >
                 {Object.keys(weightsData).map((role) => (
                   <MenuItem key={role} value={role}>
@@ -108,31 +117,42 @@ const WeightEditor = () => {
                 ))}
               </Select>
             </FormControl>
-          </Box>
-
+          {/* </Box> */}
           {/* Weight Fields */}
-          <Box flex={1} display="flex" flexDirection="column" gap={2}>
-            {Object.entries(currentWeights).map(([field, value]) => (
-              <TextField
+          {/* <Box flex={1} display="flex" flexDirection="column" gap={2} minWidth={220}> */}
+            {Object.entries(currentWeights).map(([field, value], idx) => (
+              <motion.div
                 key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
-                type="number"
-                value={value}
-                onChange={(e) => handleWeightChange(field, e.target.value)}
-                InputProps={{ inputProps: { min: 0, max: 100 } }}
-                fullWidth
-              />
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 + idx * 0.07, type: "spring", stiffness: 120, damping: 18 }}
+              >
+                <TextField
+                  label={field.charAt(0).toUpperCase() + field.slice(1)}
+                  type="number"
+                  value={value}
+                  onChange={(e) => handleWeightChange(field, e.target.value)}
+                  InputProps={{ inputProps: { min: 0, max: 100 } }}
+                  className="weight-input animated-field"
+                  variant="filled"
+                />
+              </motion.div>
             ))}
           </Box>
         </Box>
-
         {/* Submit */}
         <Box mt={4} textAlign="right">
-          <Button variant="contained" color="primary" onClick={handleUpdate}>
+          <motion.button
+            className="weight-update-btn animated-btn"
+            whileHover={{ scale: 1.04, background: "linear-gradient(90deg, #4f8cff 0%, #6c47ff 100%)" }}
+            whileTap={{ scale: 0.97 }}
+            onClick={handleUpdate}
+            type="button"
+          >
             Update Weights
-          </Button>
+          </motion.button>
         </Box>
-      </Paper>
+      </motion.div>
     </Box>
   );
 };

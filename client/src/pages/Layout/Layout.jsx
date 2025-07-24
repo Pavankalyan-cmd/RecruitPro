@@ -2,13 +2,9 @@ import React, { useState } from "react";
 import Sidebar from "../../component/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
 
-import MenuOpenIcon from "@mui/icons-material/ViewSidebarOutlined";
-
-import { IconButton, Tooltip } from "@mui/material";
-
 export default function Layout() {
   const [collapsed, setCollapsed] = useState(false);
-  const sidebarWidth = collapsed ? 80 : 250;
+  const sidebarWidth = collapsed ? 80 : 280;
 
   return (
     <div>
@@ -20,7 +16,7 @@ export default function Layout() {
           position: "fixed",
           top: 0,
           left: 0,
-          overflowY: "auto",
+          // overflowY: "auto",
           backgroundColor: "#fff",
           transition: "width 0.3s ease",
           zIndex: 1000,
@@ -43,24 +39,6 @@ export default function Layout() {
           position: "relative",
         }}
       >
-        {/* Toggle button in top-left corner of main */}
-        {collapsed && (
-          <div style={{ position: "absolute", top: 10, left: 10 }}>
-            <Tooltip title="Open Sidebar">
-              <IconButton
-                onClick={() => setCollapsed(false)}
-                sx={{
-
-                  borderRadius: "8px",
-                  "&:hover": { backgroundColor: "#e0e0e0" },
-                }}
-              >
-                <MenuOpenIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-        )}
-
         <Outlet />
       </main>
     </div>

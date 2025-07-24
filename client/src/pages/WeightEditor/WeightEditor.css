@@ -1,0 +1,106 @@
+.weight-card {
+  padding: 40px 48px;
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(80, 80, 180, 0.10);
+  border: 1.5px solid #f0f1f6;
+  background: #fff;
+  max-width: 1100px;
+  margin: 0 auto;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+.weight-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.2em;
+}
+.weight-subtitle {
+  color: #6c6c6c;
+  font-size: 1.1rem;
+  margin-bottom: 1.5em;
+}
+.weight-select-control {
+  margin-bottom: 0.5em;
+  width: 500px;
+}
+.weight-select .MuiSelect-select {
+  border-radius: 999px !important;
+  padding: 16px 24px !important;
+  background: #f5f7fa !important;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.weight-select .MuiSelect-select:focus {
+  box-shadow: 0 0 0 2px #6c47ff33;
+  border-color: #6c47ff;
+}
+.animated-field .MuiFilledInput-root {
+  border-radius: 14px !important;
+  background: #f5f7fa !important;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: box-shadow 0.2s, border 0.2s;
+  margin-top: 20px;
+  border-bottom-width: 0px !important;
+}
+.animated-field .MuiFilledInput-root:focus-within {
+  box-shadow: 0 0 0 2px #6c47ff33;
+  border-color: #6c47ff;
+}
+.weight-input {
+  width: 500px;
+  border-bottom-width: 0px !important;
+}
+.weight-input .MuiFilledInput-root:before,
+.weight-input .MuiFilledInput-root:after {
+  border-bottom: none !important;
+}
+.weight-input label {
+  font-weight: 600;
+  color: #6c6c6c;
+}
+.weight-update-btn {
+  min-width: 220px;
+  padding: 16px 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6c47ff 0%, #4f8cff 100%);
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(80, 80, 180, 0.10);
+  transition: background 0.4s cubic-bezier(.4,2,.6,1), box-shadow 0.2s, transform 0.18s, filter 0.2s;
+  text-transform: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.weight-update-btn:hover, .animated-btn:focus {
+  background: linear-gradient(90deg, #4f8cff 0%, #6c47ff 100%);
+  box-shadow: 0 8px 32px rgba(80, 80, 180, 0.16);
+  transform: translateY(-2px) scale(1.03);
+  filter: brightness(1.08) saturate(1.2);
+}
+.weight-select-control .MuiFilledInput-root,
+.weight-select-control .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.weight-update-btn {
+  display: block;
+  margin: 32px auto 0 auto;
+}
+
+@media (max-width: 900px) {
+  .weight-card {
+    padding: 18px 4px;
+  }
+  .weight-title {
+    font-size: 1.3rem;
+  }
+  .weight-subtitle {
+    font-size: 1rem;
+  }
+} 

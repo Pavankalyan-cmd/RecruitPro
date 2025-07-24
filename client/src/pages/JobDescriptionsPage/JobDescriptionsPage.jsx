@@ -26,6 +26,7 @@ import TopMatchesPage from "../TopMatchesPage/TopMatchesPage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./JobDescriptionsPage.css";
+import SendIcon from '@mui/icons-material/Send';
 
 export default function JobDescriptionsPage() {
   const [jobs, setJobs] = useState([]);
@@ -139,31 +140,28 @@ export default function JobDescriptionsPage() {
 
           {/* Controls */}
           <Box className="jd-controls">
-            <Button
-              variant="outlined"
-              component="label"
-              startIcon={<CloudUploadIcon />}
-              className="upload-jd-btn"
-            >
-              Upload JD (PDF Only, Max 2)
-              <input
-                type="file"
-                hidden
-                multiple
-                accept=".pdf"
-                onChange={handleFileChange}
-              />
-            </Button>
-
-            <Button
-              variant="contained"
-              className="submit-jd-btn"
-              disabled={!selectedFiles.length || loading}
-              onClick={handleUpload}
-            >
-              {loading ? "Uploading..." : "Submit"}
-            </Button>
-
+            <Box className="upload-card">
+              <label className="upload-dropzone">
+                <CloudUploadIcon className="upload-dropzone-icon" />
+                <span className="upload-dropzone-text">Upload JD (PDF Only, Max 2)</span>
+                <input
+                  type="file"
+                  hidden
+                  multiple
+                  accept=".pdf"
+                  onChange={handleFileChange}
+                />
+              </label>
+              <Button
+                className="modern-submit-btn"
+                onClick={handleUpload}
+                // disabled={!selectedFiles.length || loading}
+                sx={{color: '#fff', textTransform: 'none', fontWeight: '600'}}
+                endIcon={<SendIcon style={{ fontSize: '1.10rem', color: '#fff' }} />}
+              >
+                {loading ? "Uploading" : "Submit"}
+              </Button>
+            </Box>
             {selectedFiles.length > 0 && (
               <Box mt={1} sx={{ maxHeight: 100, overflowY: "auto" }}>
                 {selectedFiles.map((file, idx) => (
@@ -277,7 +275,7 @@ export default function JobDescriptionsPage() {
                             }`}
                       </Typography>
 
-                      {job.description.length > 200 && (
+                      {job.description.length > 300 && (
                         <Typography
                           variant="body2"
                           sx={{

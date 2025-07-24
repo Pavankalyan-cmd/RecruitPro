@@ -18,6 +18,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import CloseIcon from "@mui/icons-material/Close";
+import SendIcon from '@mui/icons-material/Send';
 
 import { toast } from "react-toastify";
 import {
@@ -130,31 +131,29 @@ export default function CandidatesPage() {
       </Box>
 
       <Box className="candidates-controls">
-        <Button
-          variant="outlined"
-          component="label"
-          startIcon={<CloudUploadIcon />}
-          className="upload-btn"
-        >
-          Upload PDF (Max 2)
-          <input
-            type="file"
-            hidden
-            multiple
-            accept=".pdf"
-            onChange={handleFileChange}
-            ref={fileInputRef}
-          />
-        </Button>
-
-        <Button
-          variant="contained"
-          className="save-can-btn"
-          onClick={handleSubmit}
-          disabled={uploading}
-        >
-          {uploading ? "Uploading..." : "Submit"}
-        </Button>
+        <Box className="upload-card">
+          <label className="upload-dropzone">
+            <CloudUploadIcon className="upload-dropzone-icon" />
+            <span className="upload-dropzone-text">Upload PDF (Max 2)</span>
+            <input
+              type="file"
+              hidden
+              multiple
+              accept=".pdf"
+              onChange={handleFileChange}
+              ref={fileInputRef}
+            />
+          </label>
+          <Button
+            className="modern-submit-btn"
+            onClick={handleSubmit}
+            disabled={uploading}
+            sx={{color: '#fff', textTransform: 'none', fontWeight: '600'}}
+            endIcon={<SendIcon style={{ fontSize: '1.10rem', color: '#fff' }} />}
+          >
+            {uploading ? "Uploading" : "Submit"}
+          </Button>
+        </Box>
 
         {resumeFiles.length > 0 && (
           <Box mt={1} sx={{ maxHeight: 100, overflowY: "auto" }}>
