@@ -14,13 +14,14 @@ import {
 import { fetchUserWeights, updateUserWeights } from "../services/services";
 import { motion } from "framer-motion";
 import "./WeightEditor.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const WeightEditor = () => {
   const [weightsData, setWeightsData] = useState({});
   const [selectedRole, setSelectedRole] = useState("fresher");
   const [currentWeights, setCurrentWeights] = useState({});
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     const loadWeights = async () => {
@@ -31,7 +32,7 @@ const WeightEditor = () => {
         setCurrentWeights(response.weights?.fresher || {});
       } catch (error) {
         console.error("Failed to fetch weights:", error);
-        setMessage({ type: "error", text: "Failed to load weights." });
+        toast.error("Failed to load weights.");
       } finally {
         setLoading(false);
       }
@@ -44,7 +45,6 @@ const WeightEditor = () => {
     const role = event.target.value;
     setSelectedRole(role);
     setCurrentWeights(weightsData[role] || {});
-    setMessage(null);
   };
 
   const handleWeightChange = (field, value) => {
@@ -52,7 +52,6 @@ const WeightEditor = () => {
       ...prev,
       [field]: parseInt(value, 10) || 0,
     }));
-    setMessage(null);
   };
 
   const handleUpdate = async () => {
@@ -61,17 +60,17 @@ const WeightEditor = () => {
       0
     );
     if (total !== 100) {
-      setMessage({ type: "error", text: "Weights must sum up to 100." });
+      toast.error("Weights must sum up to 100.");
       return;
     }
 
     try {
       await updateUserWeights(selectedRole, currentWeights);
       setWeightsData((prev) => ({ ...prev, [selectedRole]: currentWeights }));
-      setMessage({ type: "success", text: "Weights updated successfully." });
+      toast.success("Weights updated successfully.");
     } catch (error) {
       console.error("Update failed:", error);
-      setMessage({ type: "error", text: "Failed to update weights." });
+      toast.error("Failed to update weights.");
     }
   };
 
@@ -79,6 +78,7 @@ const WeightEditor = () => {
 
   return (
     <Box p={4}>
+      <ToastContainer position="top-right" autoClose={3000} />
       <motion.div
         className="weight-card"
         initial={{ opacity: 0, y: 40 }}
@@ -91,22 +91,28 @@ const WeightEditor = () => {
         <Typography variant="subtitle1" className="weight-subtitle" gutterBottom>
           Configure the importance of each category for different roles. Weights must sum to 100.
         </Typography>
-        {message && (
-          <Alert severity={message.type} sx={{ mb: 2 }}>
-            {message.text}
-          </Alert>
-        )}
-        <Box display="flex" gap={4} mt={2} flexWrap="wrap">
+        <Box display="flex" gap={4} mt={5} flexWrap="wrap">
           {/* Role Selection */}
           <Box flex={1} >
             <FormControl className="weight-select-control">
-              <InputLabel id="role-select-label">Select Role</InputLabel>
+              <InputLabel id="role-select-label"
+                sx={{
+                  fontWeight: 500,
+                  color: '#6c6c6c',
+                  transformOrigin: 'top left',
+                  fontSize: '1rem',
+                }}
+              >Select Role</InputLabel>
               <Select
                 labelId="role-select-label"
                 value={selectedRole}
                 label="Select Role"
                 onChange={handleRoleChange}
                 className="weight-select"
+                sx={{
+                  textAlign: 'left',
+                  fontWeight: 500,
+                }}
               >
                 {Object.keys(weightsData).map((role) => (
                   <MenuItem key={role} value={role}>
@@ -117,7 +123,6 @@ const WeightEditor = () => {
                 ))}
               </Select>
             </FormControl>
-          {/* </Box> */}
           {/* Weight Fields */}
           {/* <Box flex={1} display="flex" flexDirection="column" gap={2} minWidth={220}> */}
             {Object.entries(currentWeights).map(([field, value], idx) => (

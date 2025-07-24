@@ -19,6 +19,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from '@mui/icons-material/Send';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
 import { toast } from "react-toastify";
 import {
@@ -38,6 +39,8 @@ export default function CandidatesPage() {
   const [selectedResumeUrl, setSelectedResumeUrl] = useState(null);
   const [showFull, setShowFull] = useState(false);
   const fileInputRef = useRef(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const toggleShow = () => setShowFull((prev) => !prev);
 
@@ -61,9 +64,6 @@ export default function CandidatesPage() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this candidate?"))
-      return;
-
     try {
       await deleteCandidate(id);
       toast.success("Candidate deleted successfully");
@@ -71,6 +71,24 @@ export default function CandidatesPage() {
     } catch (err) {
       toast.error("Failed to delete candidate.");
     }
+  };
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    setDeleteOpen(false);
+    if (deleteId) {
+      await handleDelete(deleteId);
+      setDeleteId(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteOpen(false);
+    setDeleteId(null);
   };
 
   const handleFileChange = (e) => {
@@ -177,13 +195,24 @@ export default function CandidatesPage() {
         )}
       </Box>
 
+      {candidates.length === 0 ? (
+        <Box className="no-candidates-box" sx={{ textAlign: 'center', py: 8, color: '#7a7a7a' }}>
+          <PeopleAltOutlinedIcon sx={{ fontSize: 64, color: '#bdbfff', mb: 2 }} />
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4f8cff', mb: 1 }}>
+            No Candidates Found
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Upload resumes to get started!
+          </Typography>
+        </Box>
+      ) : (
+      <>
       <Box className="candidates-count-row">
         <Typography variant="body2" className="candidates-count">
           Showing <b>{candidates.length}</b> of <b>{candidates.length}</b>{" "}
           candidates
         </Typography>
       </Box>
-
       <Box className="candidates-list">
         {loading || uploading
           ? Array.from({ length: 3 }).map((_, idx) => (
@@ -304,7 +333,7 @@ export default function CandidatesPage() {
 
                       <Tooltip title="Delete Candidate" arrow>
                         <IconButton
-                          onClick={() => handleDelete(c.candidate_id)}
+                          onClick={() => handleDeleteClick(c.candidate_id)}
                         >
                           <DeleteOutlineOutlinedIcon />
                         </IconButton>
@@ -315,7 +344,8 @@ export default function CandidatesPage() {
               </Card>
             ))}
       </Box>
-
+      </>
+      )}
       <Modal
         open={openModal}
         onClose={() => setOpenModal(false)}
@@ -359,6 +389,36 @@ export default function CandidatesPage() {
           ) : (
             <Typography>Loading resume...</Typography>
           )}
+        </Box>
+      </Modal>
+      {/* Delete Confirmation Modal */}
+      <Modal open={deleteOpen} onClose={cancelDelete}>
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          borderRadius: 3,
+          p: 4,
+          minWidth: 320,
+          textAlign: 'center',
+        }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
+            Confirm Delete
+          </Typography>
+          <Typography sx={{ mb: 3 }}>
+            Are you sure you want to delete this candidate?
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            <Button variant="contained" color="error" onClick={confirmDelete}>
+              Yes
+            </Button>
+            <Button variant="outlined" onClick={cancelDelete}>
+              No
+            </Button>
+          </Box>
         </Box>
       </Modal>
 

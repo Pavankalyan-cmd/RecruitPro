@@ -23,11 +23,11 @@
   width: 500px;
 }
 .weight-select .MuiSelect-select {
-  border-radius: 999px !important;
-  padding: 16px 24px !important;
+  border-radius: 14px !important;
+  padding: 16px 16px !important;
   background: #f5f7fa !important;
-  font-weight: 600;
-  font-size: 1.1rem;
+  font-weight: 500;
+  font-size: 1rem;
   transition: box-shadow 0.2s, border 0.2s;
 }
 .weight-select .MuiSelect-select:focus {
@@ -37,10 +37,10 @@
 .animated-field .MuiFilledInput-root {
   border-radius: 14px !important;
   background: #f5f7fa !important;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 500;
   transition: box-shadow 0.2s, border 0.2s;
-  margin-top: 20px;
+  margin-top: 15px;
   border-bottom-width: 0px !important;
 }
 .animated-field .MuiFilledInput-root:focus-within {
@@ -56,7 +56,7 @@
   border-bottom: none !important;
 }
 .weight-input label {
-  font-weight: 600;
+  font-weight: 500;
   color: #6c6c6c;
 }
 .weight-update-btn {
@@ -86,6 +86,13 @@
 .weight-select-control .MuiOutlinedInput-notchedOutline {
   border: none !important;
   box-shadow: none !important;
+}
+.weight-select-control label.MuiInputLabel-root {
+  text-align: left !important;
+  left: 0;
+  transform-origin: left;
+  font-weight: 500;
+  color: #6c6c6c;
 }
 
 .weight-update-btn {

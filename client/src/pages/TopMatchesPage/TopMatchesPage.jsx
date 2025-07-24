@@ -89,6 +89,8 @@ export default function TopMatchesPage({ jd_id, onBack }) {
           <Card key={c.candidate_id} className="topmatch-card" elevation={0}>
             <CardContent className="topmatch-card-content">
               <Box className="topmatch-info">
+                
+                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
                 <Box className="topmatch-header">
                   <Box className="topmatch-avatar-col">
                     <Avatar className="topmatch-avatar">{c.name?.[0]}</Avatar>
@@ -102,7 +104,7 @@ export default function TopMatchesPage({ jd_id, onBack }) {
                         background: "#fbbf24",
                         color: "#fff",
                         fontWeight: 700,
-                        mt: 1,
+                        // mt: 1,
                         width: "15%",
                       }}
                     />
@@ -119,6 +121,34 @@ export default function TopMatchesPage({ jd_id, onBack }) {
                   </Box>
                 </Box>
 
+                <Box className="topmatch-score-col">
+                  <Typography
+                    variant="h4"
+                    sx={{ color: "#22c55e", fontWeight: 700 }}
+                  >
+                    {c.total_score}
+                  </Typography>
+                  <Typography variant="caption">Match Score</Typography>
+                  <Button
+                    variant="outlined"
+                    className="match-btn"
+        
+                    onClick={() => {
+                      setSelectedBreakdown(c.score_breakdown);
+                      setSelectedTotal(c.total_score);
+                      setScoreDialogOpen(true);
+                    }}
+                  >
+                    Score Breakdown
+                  </Button>
+                  <IconButton
+                    onClick={() => handleViewResume(c.resume_url)}
+                    color="primary"
+                  >
+                    <DescriptionOutlinedIcon />
+                  </IconButton>
+                </Box>
+                </Box>
                 <Box className="topmatch-meta">
                   <Typography variant="body2">{c.email}</Typography>
                   <Typography variant="body2">
@@ -191,33 +221,7 @@ export default function TopMatchesPage({ jd_id, onBack }) {
                 </Box>
               </Box>
 
-              <Box className="topmatch-score-col">
-                <Typography
-                  variant="h4"
-                  sx={{ color: "#22c55e", fontWeight: 700 }}
-                >
-                  {c.total_score}
-                </Typography>
-                <Typography variant="caption">Match Score</Typography>
-                <Button
-                  variant="outlined"
-                  className="match-btn"
-      
-                  onClick={() => {
-                    setSelectedBreakdown(c.score_breakdown);
-                    setSelectedTotal(c.total_score);
-                    setScoreDialogOpen(true);
-                  }}
-                >
-                  Score Breakdown
-                </Button>
-                <IconButton
-                  onClick={() => handleViewResume(c.resume_url)}
-                  color="primary"
-                >
-                  <DescriptionOutlinedIcon />
-                </IconButton>
-              </Box>
+              
             </CardContent>
           </Card>
         ))}
@@ -262,49 +266,71 @@ export default function TopMatchesPage({ jd_id, onBack }) {
         onClose={() => setScoreDialogOpen(false)}
         fullWidth
         maxWidth="xs"
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            background: '#f9faff',
+            boxShadow: 8,
+            p: 0,
+          }
+        }}
       >
-        <DialogTitle>Score Breakdown</DialogTitle>
-        <DialogContent>
-          <Box display="flex" fontWeight="bold" mb={1}>
-            <Typography sx={{ flex: 1 }}>Title</Typography>
-            <Typography sx={{ flex: 1, textAlign: "center" }}>
-              User Score
-            </Typography>
-            <Typography sx={{ flex: 1, textAlign: "center" }}>
-              Weight
-            </Typography>
-            <Typography sx={{ flex: 1, textAlign: "right" }}>
-              Weighted
-            </Typography>
-          </Box>
-          {selectedBreakdown &&
-            Object.entries(selectedBreakdown).map(([key, val]) => (
-              <Box key={key} display="flex" py={0.5}>
-                <Typography sx={{ flex: 1, textTransform: "capitalize" }}>
-                  {key}
-                </Typography>
-                <Typography sx={{ flex: 1, textAlign: "center" }}>
-                  {val.score}
-                </Typography>
-                <Typography sx={{ flex: 1, textAlign: "center" }}>
-                  {val.weight}
-                </Typography>
-                <Typography sx={{ flex: 1, textAlign: "right" }}>
-                  {val.weighted}
-                </Typography>
-              </Box>
-            ))}
-          <Divider sx={{ my: 2 }} />
-          <Box display="flex" fontWeight="bold">
-            <Typography sx={{ flex: 3 }}>Total Score</Typography>
-            <Typography sx={{ flex: 1, textAlign: "right" }}>
-              {selectedTotal}
+        <Box sx={{ p: 0 }}>
+          <Box sx={{
+            background: 'linear-gradient(90deg, #6c47ff 0%, #4f8cff 100%)',
+            color: '#fff',
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            px: 4,
+            py: 2.5,
+            mb: 2,
+          }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: 0.5 }}>
+              Score Breakdown
             </Typography>
           </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setScoreDialogOpen(false)}>Close</Button>
-        </DialogActions>
+          <DialogContent sx={{ pt: 0, pb: 2, px: 4 }}>
+            <Box display="flex" fontWeight="bold" mb={1} sx={{ color: '#4b32c3', fontSize: '1.08rem' }}>
+              <Typography sx={{ flex: 1 }}>Title</Typography>
+              <Typography sx={{ flex: 1, textAlign: "center" }}>
+                User Score
+              </Typography>
+              <Typography sx={{ flex: 1, textAlign: "center" }}>
+                Weight
+              </Typography>
+              <Typography sx={{ flex: 1, textAlign: "right" }}>
+                Weighted
+              </Typography>
+            </Box>
+            {selectedBreakdown &&
+              Object.entries(selectedBreakdown).map(([key, val], idx) => (
+                <Box key={key} display="flex" py={0.7} sx={{ bgcolor: idx % 2 === 0 ? '#f3f4f8' : 'transparent', borderRadius: 2 }}>
+                  <Typography sx={{ flex: 1, textTransform: "capitalize", fontWeight: 500 }}>
+                    {key}
+                  </Typography>
+                  <Typography sx={{ flex: 1, textAlign: "center", fontWeight: 500 }}>
+                    {val.score}
+                  </Typography>
+                  <Typography sx={{ flex: 1, textAlign: "center", fontWeight: 500 }}>
+                    {val.weight}
+                  </Typography>
+                  <Typography sx={{ flex: 1, textAlign: "right", fontWeight: 500 }}>
+                    {val.weighted}
+                  </Typography>
+                </Box>
+              ))}
+            <Divider sx={{ my: 2 }} />
+            <Box display="flex" fontWeight="bold" sx={{ color: '#222', fontSize: '1.13rem', bgcolor: '#e0e7ff', borderRadius: 2, px: 1, py: 1 }}>
+              <Typography sx={{ flex: 3, fontWeight: 700 }}>Total Score</Typography>
+              <Typography sx={{ flex: 1, textAlign: "right", fontWeight: 700 }}>
+                {selectedTotal}
+              </Typography>
+            </Box>
+          </DialogContent>
+          <DialogActions sx={{ px: 3, pb: 2, justifyContent: 'flex-end' }}>
+            <Button onClick={() => setScoreDialogOpen(false)} sx={{ color: '#6c47ff', fontWeight: 600 }}>Close</Button>
+          </DialogActions>
+        </Box>
       </Dialog>
     </Box>
   );

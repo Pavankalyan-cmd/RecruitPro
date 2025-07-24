@@ -112,10 +112,11 @@
   transition: background 0.2s, box-shadow 0.2s;
   box-shadow: 0 1px 4px rgba(80, 80, 180, 0.08);
   padding-left: 20px;
+  background-color: #EEE !important;
 }
 
 .sidebar-toggle-btn:hover {
-  background: #e6eaff;
+  background-color: #fff !important;
   box-shadow: 0 2px 8px rgba(80, 80, 180, 0.10);
   /* color: #6b56fe; */
 }
@@ -159,7 +160,7 @@
 }
 
 .sidebar-slickbit-logo {
-  width: 100px;
+  width: 150px;
   height: auto;
   margin-bottom: 8px;
   border-radius: 8px;

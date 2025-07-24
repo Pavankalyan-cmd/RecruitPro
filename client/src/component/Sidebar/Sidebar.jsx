@@ -9,6 +9,8 @@ import {
   Divider,
   IconButton,
   Tooltip,
+  Modal,
+  Button,
 } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/PeopleAltOutlined";
 import DescriptionIcon from "@mui/icons-material/DescriptionOutlined";
@@ -21,6 +23,7 @@ import slickbit from "../../assets/image/slickbit.png";
 import TuneIcon from "@mui/icons-material/Tune";
 import { motion } from "framer-motion";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import { useState } from "react";
 const navItems = [
   { label: "Candidates", icon: <PeopleIcon />, path: "candidates" },
   {
@@ -37,10 +40,19 @@ const settingsItems = [
 
 export default function Sidebar({ onToggle, collapsed }) {
   const navigate = useNavigate();
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
   const handleLogout = () => {
-  
+    setLogoutOpen(true);
+  };
+
+  const confirmLogout = () => {
+    setLogoutOpen(false);
     navigate("/");
+  };
+
+  const cancelLogout = () => {
+    setLogoutOpen(false);
   };
 
   return (
@@ -70,7 +82,7 @@ export default function Sidebar({ onToggle, collapsed }) {
         style={{ justifyContent: collapsed ? "center" : "space-between", alignItems: "center", display: "flex" }}
       >
         {!collapsed && (
-          <>
+          <Box onClick={() => navigate("/dashboard/candidates")} sx={{cursor: "pointer", display: "flex", flexDirection: "row", alignItems: "center", gap: 1}}>
             <img
               src="https://i.postimg.cc/XJG9rkr8/Adobe-Express-file.png"
               alt="RecruitPro Logo"
@@ -79,7 +91,7 @@ export default function Sidebar({ onToggle, collapsed }) {
             <Typography className="sidebar-title" variant="h6">
               RecruitPro
             </Typography>
-          </>
+          </Box>
         )}
         <Tooltip title={collapsed ? "Expand sidebar" : "Collapse sidebar"}>
           <motion.div whileTap={{ scale: 0.9 }}>
@@ -89,7 +101,7 @@ export default function Sidebar({ onToggle, collapsed }) {
                 fontSize="medium"
                 style={{
                   transform: collapsed ? "rotate(180deg)" : "rotate(0deg)",
-                  transition: "transform 0.3s ease",
+                  transition: "transform 0.3s ease"
                 }}
               />
             </IconButton>
@@ -191,6 +203,36 @@ export default function Sidebar({ onToggle, collapsed }) {
             )}
           </motion.li>
         </List>
+        {/* Logout Confirmation Modal */}
+        <Modal open={logoutOpen} onClose={cancelLogout}>
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            borderRadius: 3,
+            p: 4,
+            minWidth: 320,
+            textAlign: 'center',
+          }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
+              Confirm Logout
+            </Typography>
+            <Typography sx={{ mb: 3 }}>
+              Are you sure you want to logout?
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+              <Button variant="contained" color="error" onClick={confirmLogout}>
+                Yes
+              </Button>
+              <Button variant="outlined" onClick={cancelLogout}>
+                No
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
       </Box>
       {/* Bottom Toggle */}
       {/* <Divider className="sidebar-divider" /> */}
