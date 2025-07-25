@@ -101,12 +101,12 @@
 .topmatch-header {
   display: flex;
   
-  align-items: baseline;
+  /* align-items: baseline; */
   gap: 12px;
 }
 .topmatch-names{
   text-align: left;
-  width: 40%;
+  /* width: 40%; */
 }
 .topmatch-name {
   font-weight: 700;
@@ -234,9 +234,9 @@
 
 .topmatch-score-col {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  min-width: 180px;
+  flex-direction: row;
+  align-items: center;
+  /* min-width: 180px; */
   gap: 8px;
 }
 

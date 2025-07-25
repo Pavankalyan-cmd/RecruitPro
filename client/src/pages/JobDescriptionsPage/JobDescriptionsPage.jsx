@@ -26,6 +26,8 @@ import TopMatchesPage from "../TopMatchesPage/TopMatchesPage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./JobDescriptionsPage.css";
+import SendIcon from '@mui/icons-material/Send';
+import { motion } from "framer-motion";
 
 export default function JobDescriptionsPage() {
   const [jobs, setJobs] = useState([]);
@@ -35,6 +37,8 @@ export default function JobDescriptionsPage() {
   const [jdViewUrl, setJdViewUrl] = useState(null);
   const [jdModalOpen, setJdModalOpen] = useState(false);
   const [showFullJD, setShowFullJD] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const hasFetched = useRef(false);
 
@@ -77,8 +81,6 @@ export default function JobDescriptionsPage() {
   };
 
   const handleDeleteJD = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this JD?")) return;
-
     try {
       await deleteJobDescription(id);
       toast.success("Job description deleted successfully!");
@@ -117,6 +119,24 @@ export default function JobDescriptionsPage() {
     setSelectedFiles(files);
   };
 
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    setDeleteOpen(false);
+    if (deleteId) {
+      await handleDeleteJD(deleteId);
+      setDeleteId(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteOpen(false);
+    setDeleteId(null);
+  };
+
   return (
     <Box className="jd-root">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -139,31 +159,28 @@ export default function JobDescriptionsPage() {
 
           {/* Controls */}
           <Box className="jd-controls">
-            <Button
-              variant="outlined"
-              component="label"
-              startIcon={<CloudUploadIcon />}
-              className="upload-jd-btn"
-            >
-              Upload JD (PDF Only, Max 2)
-              <input
-                type="file"
-                hidden
-                multiple
-                accept=".pdf"
-                onChange={handleFileChange}
-              />
-            </Button>
-
-            <Button
-              variant="contained"
-              className="submit-jd-btn"
-              disabled={!selectedFiles.length || loading}
-              onClick={handleUpload}
-            >
-              {loading ? "Uploading..." : "Submit"}
-            </Button>
-
+            <Box className="upload-card">
+              <label className="upload-dropzone">
+                <CloudUploadIcon className="upload-dropzone-icon" />
+                <span className="upload-dropzone-text">Upload JD (PDF Only, Max 2)</span>
+                <input
+                  type="file"
+                  hidden
+                  multiple
+                  accept=".pdf"
+                  onChange={handleFileChange}
+                />
+              </label>
+              <Button
+                className="modern-submit-btn"
+                onClick={handleUpload}
+                // disabled={!selectedFiles.length || loading}
+                sx={{color: '#fff', textTransform: 'none', fontWeight: '600'}}
+                endIcon={<SendIcon style={{ fontSize: '1.10rem', color: '#fff' }} />}
+              >
+                {loading ? "Uploading" : "Submit"}
+              </Button>
+            </Box>
             {selectedFiles.length > 0 && (
               <Box mt={1} sx={{ maxHeight: 100, overflowY: "auto" }}>
                 {selectedFiles.map((file, idx) => (
@@ -186,7 +203,18 @@ export default function JobDescriptionsPage() {
             )}
           </Box>
 
-          {/* Count Row */}
+          {jobs.length === 0 ? (
+          <Box className="no-jobs-box" sx={{ textAlign: 'center', py: 8, color: '#7a7a7a' }}>
+                <DescriptionOutlinedIcon sx={{ fontSize: 64, color: '#bdbfff', mb: 2 }} />
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4f8cff', mb: 1 }}>
+                  No Job Descriptions Found
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 2 }}>
+                  Upload job descriptions to get started!
+                </Typography>
+          </Box>
+          ) : (
+          <>
           <Box className="candidates-count-row">
             <Typography variant="body2" className="candidates-count">
               Showing <b>{jobs.length}</b> of <b>{jobs.length}</b> Job
@@ -233,10 +261,6 @@ export default function JobDescriptionsPage() {
                   </CardContent>
                 </Card>
               ))
-            ) : jobs.length === 0 ? (
-              <Typography variant="body2" sx={{ mt: 2 }}>
-                No job descriptions found.
-              </Typography>
             ) : (
               jobs.map((job, idx) => (
                 <Card key={job.jd_id || idx} className="jd-card" elevation={0}>
@@ -277,7 +301,7 @@ export default function JobDescriptionsPage() {
                             }`}
                       </Typography>
 
-                      {job.description.length > 200 && (
+                      {job.description.length > 300 && (
                         <Typography
                           variant="body2"
                           sx={{
@@ -299,14 +323,14 @@ export default function JobDescriptionsPage() {
                           {job.required_experience && (
                             <Chip
                               label={job.required_experience}
-                              className="jd-req-tag"
+                              className="candidate-tag"
                             />
                           )}
                           {job.required_skills?.map((skill, i) => (
                             <Chip
                               key={i}
                               label={skill}
-                              className="jd-req-tag"
+                              className="candidate-tag"
                             />
                           ))}
                         </Box>
@@ -315,17 +339,25 @@ export default function JobDescriptionsPage() {
 
                     <Box className="jd-card-actions">
                       <Tooltip title="View Matches">
-                        <Button
-                          variant="outlined"
+                        <motion.button
                           className="match-btn"
+                          whileHover={{ scale: 1.04, background: "linear-gradient(90deg, #4f8cff 0%, #6c47ff 100%)" }}
+                          whileTap={{ scale: 0.97 }}
                           onClick={() => handleViewMatches(job.jd_id)}
+                          style={{ border: 'none', outline: 'none', cursor: 'pointer', padding: 0, background: 'none' }}
                         >
-                          Matches
-                        </Button>
+                          <Button
+                            variant="outlined"
+                            className="match-btn"
+                            style={{ width: '100%' }}
+                          >
+                            Matches
+                          </Button>
+                        </motion.button>
                       </Tooltip>
 
                       <Tooltip title="Delete Job Description">
-                        <IconButton onClick={() => handleDeleteJD(job.jd_id)}>
+                        <IconButton onClick={() => handleDeleteClick(job.jd_id)}>
                           <DeleteOutlineOutlinedIcon />
                         </IconButton>
                       </Tooltip>
@@ -350,6 +382,8 @@ export default function JobDescriptionsPage() {
               ))
             )}
           </Box>
+          </>
+          )}
         </>
       )}
 
@@ -397,6 +431,36 @@ export default function JobDescriptionsPage() {
           ) : (
             <Typography>Loading job description...</Typography>
           )}
+        </Box>
+      </Modal>
+      {/* Delete Confirmation Modal */}
+      <Modal open={deleteOpen} onClose={cancelDelete}>
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          borderRadius: 3,
+          p: 4,
+          minWidth: 320,
+          textAlign: 'center',
+        }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
+            Confirm Delete
+          </Typography>
+          <Typography sx={{ mb: 3 }}>
+            Are you sure you want to delete this job description?
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            <Button variant="contained" color="error" onClick={confirmDelete}>
+              Yes
+            </Button>
+            <Button variant="outlined" onClick={cancelDelete}>
+              No
+            </Button>
+          </Box>
         </Box>
       </Modal>
 
