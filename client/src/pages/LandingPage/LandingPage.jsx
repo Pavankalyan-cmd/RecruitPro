@@ -5,6 +5,7 @@ import "./LandingPage.css";
 import { useNavigate } from "react-router-dom";
 import { getIdToken } from "firebase/auth";
 import { auth, provider, signInWithPopup } from "../../firebase";
+import { motion } from "framer-motion";
 
 const features = [
   "Reduce screening time by 80%",
@@ -50,23 +51,50 @@ export default function LandingPage() {
           </Typography>
         </Box>
       </header>
+
       <main className="landing-main">
-        <Typography className="platform-badge" variant="caption">
-          ✨ AI-Powered Recruitment Platform
-        </Typography>
-        <Typography
-          className="main-title"
-          variant="h2"
-          sx={{ fontWeight: "bold" }}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
         >
-          Smart Resume Screening
-          <br />& Candidate Matching
-        </Typography>
-        <Typography className="main-desc" variant="subtitle1">
-          Transform your recruitment process with AI-powered resume analysis,
-          intelligent candidate scoring, and seamless integrations.
-        </Typography>
-        <Box className="cta-buttons">
+          <Typography className="platform-badge" variant="caption">
+            ✨ AI-Powered Recruitment Platform
+          </Typography>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.7 }}
+        >
+          <Typography
+            className="main-title"
+            variant="h2"
+            sx={{ fontWeight: "bold" }}
+          >
+            Smart Resume Screening
+            <br />& Candidate Matching
+          </Typography>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.7 }}
+        >
+          <Typography className="main-desc" variant="subtitle1">
+            Transform your recruitment process with AI-powered resume analysis,
+            intelligent candidate scoring, and seamless integrations.
+          </Typography>
+        </motion.div>
+
+        <motion.div
+          className="cta-buttons"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.6 }}
+        >
           <Button
             variant="contained"
             className="start-trial-btn"
@@ -74,15 +102,33 @@ export default function LandingPage() {
           >
             Sign In with Google
           </Button>
-        </Box>
-        <Box className="features-row">
+        </motion.div>
+
+        <motion.div
+          className="features-row"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.2,
+              },
+            },
+          }}
+        >
           {features.map((feature, idx) => (
-            <Box key={idx} className="feature-item">
+            <motion.div
+              key={idx}
+              className="feature-item"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <CheckCircleIcon color="success" fontSize="small" />
               <Typography variant="body2">{feature}</Typography>
-            </Box>
+            </motion.div>
           ))}
-        </Box>
+        </motion.div>
       </main>
     </Box>
   );

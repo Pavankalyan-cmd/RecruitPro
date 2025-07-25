@@ -102,7 +102,8 @@ async def candidate_resumes(
                 - Institution name
                 - Graduation year if available
             - **technical_skills**: List of technologies, programming languages, tools, or frameworks mentioned.
-            - **key_achievements**: Bullet points or sentences indicating major professional accomplishments or recognitions.
+            - **key_achievements**: Bullet points or sentences indicating major professional accomplishments or recognitions. If none are found in the resume, return: "No notable achievements mentioned."
+
             - **certifications**: Any relevant professional certifications or completed courses (e.g., AWS Certified Developer).
             - **projects**: List of key projects with:
                 - Title
