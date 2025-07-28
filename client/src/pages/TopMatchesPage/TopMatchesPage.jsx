@@ -23,6 +23,9 @@ import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { getTopScoreCandidates } from "../services/services";
 import "./TopMatchesPage.css";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function TopMatchesPage({ jd_id, onBack }) {
   const [candidates, setCandidates] = useState([]);
@@ -32,6 +35,8 @@ export default function TopMatchesPage({ jd_id, onBack }) {
   const [scoreDialogOpen, setScoreDialogOpen] = useState(false);
   const [selectedBreakdown, setSelectedBreakdown] = useState(null);
   const [selectedTotal, setSelectedTotal] = useState(null);
+  const navigate = useNavigate();
+  
 
   const handleViewResume = (resumeUrl) => {
     setSelectedResumeUrl(resumeUrl);
@@ -42,6 +47,9 @@ export default function TopMatchesPage({ jd_id, onBack }) {
     setOpenResumeDialog(false);
     setSelectedResumeUrl("");
   };
+  const handleChatPage =()=>{
+  navigate("/dashboard/agent-chat");
+  }
 
   useEffect(() => {
     const loadTopScores = async () => {
@@ -81,6 +89,15 @@ export default function TopMatchesPage({ jd_id, onBack }) {
             Highest scoring candidates for your open positions
           </Typography>
         </Box>
+        <Button
+          variant="outlined"
+          className="match-btn"
+          onClick={()=>{
+            handleChatPage()
+          }}
+        >
+          Chat with Ai
+        </Button>
       </Box>
 
       {/* Candidate Cards */}
@@ -89,65 +106,70 @@ export default function TopMatchesPage({ jd_id, onBack }) {
           <Card key={c.candidate_id} className="topmatch-card" elevation={0}>
             <CardContent className="topmatch-card-content">
               <Box className="topmatch-info">
-                
-                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
-                <Box className="topmatch-header">
-                  <Box className="topmatch-avatar-col">
-                    <Avatar className="topmatch-avatar">{c.name?.[0]}</Avatar>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box className="topmatch-header">
+                    <Box className="topmatch-avatar-col">
+                      <Avatar className="topmatch-avatar">{c.name?.[0]}</Avatar>
+                    </Box>
+                    <Box className="topmatch-names">
+                      <Chip
+                        label={`#${idx + 1}`}
+                        size="small"
+                        className="topmatch-rank-chip"
+                        sx={{
+                          background: "#fbbf24",
+                          color: "#fff",
+                          fontWeight: 700,
+                          // mt: 1,
+                          width: "35%",
+                        }}
+                      />
+                      <Typography variant="h5" className="topmatch-name">
+                        <b>{c.name}</b>
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        className="topmatch-role"
+                        sx={{ color: "#2563eb", fontWeight: 600 }}
+                      >
+                        {c.designation}
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Box className="topmatch-names">
-                    <Chip
-                      label={`#${idx + 1}`}
-                      size="small"
-                      className="topmatch-rank-chip"
-                      sx={{
-                        background: "#fbbf24",
-                        color: "#fff",
-                        fontWeight: 700,
-                        // mt: 1,
-                        width: "15%",
-                      }}
-                    />
-                    <Typography variant="h5" className="topmatch-name">
-                      <b>{c.name}</b>
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      className="topmatch-role"
-                      sx={{ color: "#2563eb", fontWeight: 600 }}
-                    >
-                      {c.designation}
-                    </Typography>
-                  </Box>
-                </Box>
 
-                <Box className="topmatch-score-col">
-                  <Typography
-                    variant="h4"
-                    sx={{ color: "#22c55e", fontWeight: 700 }}
-                  >
-                    {c.total_score}
-                  </Typography>
-                  <Typography variant="caption">Match Score</Typography>
-                  <Button
-                    variant="outlined"
-                    className="match-btn"
-        
-                    onClick={() => {
-                      setSelectedBreakdown(c.score_breakdown);
-                      setSelectedTotal(c.total_score);
-                      setScoreDialogOpen(true);
-                    }}
-                  >
-                    Score Breakdown
-                  </Button>
-                  <IconButton
-                    onClick={() => handleViewResume(c.resume_url)}
-                    color="primary"
-                  >
-                    <DescriptionOutlinedIcon />
-                  </IconButton>
-                </Box>
+                  <Box className="topmatch-score-col">
+                    <Typography
+                      variant="h4"
+                      sx={{ color: "#22c55e", fontWeight: 700 }}
+                    >
+                      {c.total_score}
+                    </Typography>
+                    <Typography variant="caption">Match Score</Typography>
+                    <Button
+                      variant="outlined"
+                      className="match-btn"
+                      onClick={() => {
+                        setSelectedBreakdown(c.score_breakdown);
+                        setSelectedTotal(c.total_score);
+                        setScoreDialogOpen(true);
+                      }}
+                    >
+                      Score Breakdown
+                    </Button>
+                    <IconButton
+                      onClick={() => handleViewResume(c.resume_url)}
+                      color="primary"
+                    >
+                      <DescriptionOutlinedIcon />
+                    </IconButton>
+                  </Box>
                 </Box>
                 <Box className="topmatch-meta">
                   <Typography variant="body2">{c.email}</Typography>
@@ -179,11 +201,25 @@ export default function TopMatchesPage({ jd_id, onBack }) {
                       Key Strengths
                     </Typography>
                     <Box className="topmatch-tags">
-                      {(c.key_strengths || []).map((str, idx) => (
-                        <Chip key={idx} label={str} className="topmatch-tag" />
-                      ))}
+                      {c.key_strengths && c.key_strengths.length > 0 ? (
+                        c.key_strengths.map((str, idx) => (
+                          <Chip
+                            key={idx}
+                            label={str}
+                            className="topmatch-tag"
+                          />
+                        ))
+                      ) : (
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "#9e9e9e", mt: 1 }}
+                        >
+                          N/A
+                        </Typography>
+                      )}
                     </Box>
                   </Box>
+
                   <Box>
                     <Typography variant="body2" sx={{ color: "#7a7a7a" }}>
                       Skills Match
@@ -206,11 +242,20 @@ export default function TopMatchesPage({ jd_id, onBack }) {
                   <Typography variant="subtitle2">
                     <b>Key Achievements</b>
                   </Typography>
-                  <ul>
-                    {(c.key_achievements || []).map((ach, i) => (
-                      <li key={i}>{ach}</li>
-                    ))}
-                  </ul>
+                  {c.key_achievements && c.key_achievements.length > 0 ? (
+                    <ul>
+                      {c.key_achievements.map((ach, i) => (
+                        <li key={i}>{ach}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "#9e9e9e", fontStyle: "italic", mt: 1 }}
+                    >
+                      N/A
+                    </Typography>
+                  )}
                 </Box>
 
                 <Box>
@@ -220,8 +265,6 @@ export default function TopMatchesPage({ jd_id, onBack }) {
                   <Typography variant="body2">{c.education}</Typography>
                 </Box>
               </Box>
-
-              
             </CardContent>
           </Card>
         ))}
@@ -269,28 +312,38 @@ export default function TopMatchesPage({ jd_id, onBack }) {
         PaperProps={{
           sx: {
             borderRadius: 4,
-            background: '#f9faff',
+            background: "#f9faff",
             boxShadow: 8,
             p: 0,
-          }
+          },
         }}
       >
         <Box sx={{ p: 0 }}>
-          <Box sx={{
-            background: 'linear-gradient(90deg, #6c47ff 0%, #4f8cff 100%)',
-            color: '#fff',
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
-            px: 4,
-            py: 2.5,
-            mb: 2,
-          }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: 0.5 }}>
+          <Box
+            sx={{
+              background: "linear-gradient(90deg, #6c47ff 0%, #4f8cff 100%)",
+              color: "#fff",
+              borderTopLeftRadius: 16,
+              borderTopRightRadius: 16,
+              px: 4,
+              py: 2.5,
+              mb: 2,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 700, letterSpacing: 0.5 }}
+            >
               Score Breakdown
             </Typography>
           </Box>
           <DialogContent sx={{ pt: 0, pb: 2, px: 4 }}>
-            <Box display="flex" fontWeight="bold" mb={1} sx={{ color: '#4b32c3', fontSize: '1.08rem' }}>
+            <Box
+              display="flex"
+              fontWeight="bold"
+              mb={1}
+              sx={{ color: "#4b32c3", fontSize: "1.08rem" }}
+            >
               <Typography sx={{ flex: 1 }}>Title</Typography>
               <Typography sx={{ flex: 1, textAlign: "center" }}>
                 User Score
@@ -304,31 +357,69 @@ export default function TopMatchesPage({ jd_id, onBack }) {
             </Box>
             {selectedBreakdown &&
               Object.entries(selectedBreakdown).map(([key, val], idx) => (
-                <Box key={key} display="flex" py={0.7} sx={{ bgcolor: idx % 2 === 0 ? '#f3f4f8' : 'transparent', borderRadius: 2 }}>
-                  <Typography sx={{ flex: 1, textTransform: "capitalize", fontWeight: 500 }}>
+                <Box
+                  key={key}
+                  display="flex"
+                  py={0.7}
+                  sx={{
+                    bgcolor: idx % 2 === 0 ? "#f3f4f8" : "transparent",
+                    borderRadius: 2,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      flex: 1,
+                      textTransform: "capitalize",
+                      fontWeight: 500,
+                    }}
+                  >
                     {key}
                   </Typography>
-                  <Typography sx={{ flex: 1, textAlign: "center", fontWeight: 500 }}>
+                  <Typography
+                    sx={{ flex: 1, textAlign: "center", fontWeight: 500 }}
+                  >
                     {val.score}
                   </Typography>
-                  <Typography sx={{ flex: 1, textAlign: "center", fontWeight: 500 }}>
+                  <Typography
+                    sx={{ flex: 1, textAlign: "center", fontWeight: 500 }}
+                  >
                     {val.weight}
                   </Typography>
-                  <Typography sx={{ flex: 1, textAlign: "right", fontWeight: 500 }}>
+                  <Typography
+                    sx={{ flex: 1, textAlign: "right", fontWeight: 500 }}
+                  >
                     {val.weighted}
                   </Typography>
                 </Box>
               ))}
             <Divider sx={{ my: 2 }} />
-            <Box display="flex" fontWeight="bold" sx={{ color: '#222', fontSize: '1.13rem', bgcolor: '#e0e7ff', borderRadius: 2, px: 1, py: 1 }}>
-              <Typography sx={{ flex: 3, fontWeight: 700 }}>Total Score</Typography>
+            <Box
+              display="flex"
+              fontWeight="bold"
+              sx={{
+                color: "#222",
+                fontSize: "1.13rem",
+                bgcolor: "#e0e7ff",
+                borderRadius: 2,
+                px: 1,
+                py: 1,
+              }}
+            >
+              <Typography sx={{ flex: 3, fontWeight: 700 }}>
+                Total Score
+              </Typography>
               <Typography sx={{ flex: 1, textAlign: "right", fontWeight: 700 }}>
                 {selectedTotal}
               </Typography>
             </Box>
           </DialogContent>
-          <DialogActions sx={{ px: 3, pb: 2, justifyContent: 'flex-end' }}>
-            <Button onClick={() => setScoreDialogOpen(false)} sx={{ color: '#6c47ff', fontWeight: 600 }}>Close</Button>
+          <DialogActions sx={{ px: 3, pb: 2, justifyContent: "flex-end" }}>
+            <Button
+              onClick={() => setScoreDialogOpen(false)}
+              sx={{ color: "#6c47ff", fontWeight: 600 }}
+            >
+              Close
+            </Button>
           </DialogActions>
         </Box>
       </Dialog>

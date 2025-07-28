@@ -1,0 +1,247 @@
+.expensewise-fullpage-chat {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Inter", sans-serif;
+  /* background-color: #f4f4f4; */
+  color: #000;
+}
+
+.expensewise-fullpage-chat.dark {
+  background-color: #121212;
+  color: #fff;
+}
+
+.expensewise-chat-username {
+  text-align: center;
+  opacity: 0.5;
+  font-size: 1.2rem;
+  margin-bottom: 10px; 
+  background: linear-gradient(90deg, #6c47ff 0%, #6c8cff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.expensewise-chat-header {
+  position: relative;
+  width: 85%;
+  height: 65px;
+  margin: 1% 1% 1% 8%;
+  background-color: black;
+  color: white;
+  border-radius: 50px;
+  box-shadow: 25px 25px 50px #bebebe, -25px -25px 50px #ffffff;
+  overflow: hidden;
+  z-index: 1111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.expensewise-theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 18px;
+  
+}
+
+.expensewise-chat-body {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  margin: 0 auto;
+  margin-top: 8%;
+  width: 60%;
+  background: inherit;
+}
+
+.expensewise-chat-msg {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.expensewise-chat-msg.ai {
+  justify-content: flex-start;
+
+}
+
+.expensewise-chat-msg.user {
+  justify-content: flex-end;
+  flex-direction: row;
+}
+
+.expensewise-bubble {
+  max-width: 65%;
+  padding: 12px 16px;
+  border-radius: 20px;
+  background: #e0e0e0;
+  color: #000;
+  font-size: 0.95rem;
+}
+
+.expensewise-fullpage-chat.dark .expensewise-bubble {
+  background: #1f1f1f;
+  color: white;
+}
+
+.expensewise-bubble.user {
+  text-align: right;
+}
+
+.expensewise-bubble.ai {
+  text-align: left;
+}
+
+.expensewise-bubble.typing {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.typing .dot {
+  display: inline-block;
+  animation: blink 1s infinite;
+}
+
+.typing .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0% { opacity: 0.2; }
+  20% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+.expensewise-chat-footer {
+  display: flex;
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem 1rem;
+  margin: 0 auto;
+  margin-bottom: 6% !important;
+  width: 60%;
+  background-color: #fff;
+  border-radius: 50px;
+  box-shadow: 25px 25px 50px #bebebe, -25px -25px 50px #ffffff;
+
+}
+
+.expensewise-fullpage-chat.dark .expensewise-chat-footer {
+  background: #1a1a1a;
+}
+
+.expensewise-chat-footer input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background: white;
+  color: black;
+}
+
+.expensewise-fullpage-chat.dark .expensewise-chat-footer input {
+  background: #374151;
+  color: white;
+  border: 1px solid #4b5563;
+}
+
+.expensewise-chat-footer button {
+  background-color: #6366f1;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  margin-left: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.expensewise-fullpage-chat.dark .expensewise-chat-footer button {
+  background-color: #6366f1;
+  color: white;
+}
+
+.expensewise-avatar,
+.expensewise-avataruser {
+  margin: 0 10px;
+}
+
+.expensewise-bubble h1,
+.expensewise-bubble h2,
+.expensewise-bubble h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.expensewise-bubble ul {
+  padding-left: 18px;
+  margin: 6px 0;
+}
+
+.expensewise-bubble li {
+  margin-bottom: 4px;
+}
+
+.expensewise-bubble pre.block-code {
+  background-color: #fef3c7;
+  padding: 8px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.expensewise-bubble code.inline-code {
+  background-color: #fef3c7;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+@media only screen and (max-width: 600px) {
+  .expensewise-chat-body,
+  .expensewise-chat-footer {
+    width: 90vw !important;
+    
+  }
+  .expensewise-chat-body {
+    margin-top: 19% !important;
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .expensewise-chat-body,
+  .expensewise-chat-footer {
+    width: 85vw !important;
+  }
+  .expensewise-chat-body {
+    margin-top: 5% !important;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  .expensewise-chat-body,
+  .expensewise-chat-footer {
+    width: 75vw !important;
+  }
+  .expensewise-chat-body {
+    margin-top: 5% !important;
+  }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  .expensewise-chat-body,
+  .expensewise-chat-footer {
+    width: 65vw !important;
+
+  }
+  .expensewise-chat-body {
+    margin-top: 5% !important;
+  }
+}

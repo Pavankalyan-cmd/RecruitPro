@@ -13,7 +13,7 @@ export const candidateResume = async (resumeFiles) => {
 
   const formData = new FormData();
   resumeFiles.forEach((file) => {
-    formData.append("resumes", file); // ⬅️ 'resumes' matches the FastAPI parameter
+    formData.append("resumes", file);
   });
 
   try {
@@ -63,10 +63,6 @@ export const getCandidateResumes = async () => {
     throw error;
   }
 };
-
-
-
-
 
 export const getJobDescriptions = async () => {
   const auth = getAuth();
