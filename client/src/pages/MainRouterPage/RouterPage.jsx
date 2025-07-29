@@ -25,9 +25,9 @@ export default function Routespage() {
             <Route path="candidates" element={<CandidatesPage />} />
             <Route path="job-descriptions" element={<JobDescriptionsPage />} />
             <Route path="top-matches" element={<TopMatchesPage />} />
-            <Route path="integrations" element={<Integrations/>}/>
-            <Route path="score" element={<WeightEditor/>}/>
-            <Route path="agent-chat" element={<AgentChatFullPage/>}/>
+            <Route path="integrations" element={<Integrations />} />
+            <Route path="score" element={<WeightEditor />} />
+            <Route path="agent-chat/:jd_id" element={<AgentChatFullPage />} />
           </Route>
         </Route>
       </Routes>

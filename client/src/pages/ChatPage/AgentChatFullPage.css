@@ -67,12 +67,14 @@
 
 .expensewise-chat-msg.ai {
   justify-content: flex-start;
+  
 
 }
 
 .expensewise-chat-msg.user {
   justify-content: flex-end;
   flex-direction: row;
+  
 }
 
 .expensewise-bubble {
@@ -91,9 +93,18 @@
 
 .expensewise-bubble.user {
   text-align: right;
+  background: linear-gradient(90deg, rgba(108, 71, 255, 0.6) 0%, rgba(108, 140, 255, 0.6) 100%);
+  color: white;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
 }
 
 .expensewise-bubble.ai {
+background: linear-gradient(90deg, rgba(108, 71, 255, 0.7) 0%, rgba(108, 140, 255, 0.7) 100%);
+  color: white;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: left;
 }
 
@@ -244,4 +255,43 @@
   .expensewise-chat-body {
     margin-top: 5% !important;
   }
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 0; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+
+.expensewise-fullpage-chat.light .ai-avatar {
+  background: #e9f2ff;  
+  color: #1a73e8;       
+}
+
+.expensewise-fullpage-chat.light .user-avatar {
+  background: #eaf6ee;  
+  color: #2e7d32;      
+}
+
+
+.expensewise-fullpage-chat.dark .ai-avatar {
+  background: #1f2b3a;  
+  color: #90caf9;     
+}
+
+.expensewise-fullpage-chat.dark .user-avatar {
+  background: #1f2a22; 
+  color: #a5d6a7;       
+}
+
+.expensewise-avatar,
+.expensewise-avataruser {
+  display: flex;
+  align-items: flex-start;
+  margin: 0 8px;
 }

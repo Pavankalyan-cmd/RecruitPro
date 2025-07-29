@@ -6,8 +6,10 @@ from routers import job_description
 from routers import score_weights
 from routers import candidates
 from routers import topscore
+from routers import ai_chat
 load_dotenv()
 app = FastAPI()
+app.include_router(ai_chat.router,prefix="/api")
 app.include_router(candidates.router,prefix="/api")
 app.include_router(job_description.router,prefix="/api")
 app.include_router(topscore.router,prefix="/api")

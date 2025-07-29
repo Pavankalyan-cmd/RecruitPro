@@ -36,8 +36,6 @@ export default function TopMatchesPage({ jd_id, onBack }) {
   const [selectedBreakdown, setSelectedBreakdown] = useState(null);
   const [selectedTotal, setSelectedTotal] = useState(null);
   const navigate = useNavigate();
-  
-
   const handleViewResume = (resumeUrl) => {
     setSelectedResumeUrl(resumeUrl);
     setOpenResumeDialog(true);
@@ -48,7 +46,7 @@ export default function TopMatchesPage({ jd_id, onBack }) {
     setSelectedResumeUrl("");
   };
   const handleChatPage =()=>{
-  navigate("/dashboard/agent-chat");
+    navigate(`/dashboard/agent-chat/${jd_id}`);
   }
 
   useEffect(() => {

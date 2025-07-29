@@ -110,6 +110,7 @@ Scoring Criteria for each category (0–100):
 4. **Certifications (0–100)**  
 - Evaluate relevance and validity of certifications to the role  
 - Score based on match and industry recognition
+
 5. Classify each candidate as either a "fresher" or a "senior_engineer" or "mid_level_professional based on their total years of experience:
 
 If the candidate has less than 1 year of experience, classify profile_type as "fresher".

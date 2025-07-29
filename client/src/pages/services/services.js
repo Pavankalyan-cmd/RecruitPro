@@ -213,3 +213,28 @@ export const updateUserWeights = async (role, newWeights) => {
 
   return response.data;
 };
+
+
+export const chatTopMatches = async (jd_id, query) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) throw new Error("User not authenticated");
+
+  const idToken = await user.getIdToken();
+
+  const response = await axios.post(
+    `${API_BASE}/api/chat-top-matches`,
+    {
+      jd_id,
+      query,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    }
+  );
+   console.log("recives response from chatTopMatches",response.data)
+  return response.data;
+};

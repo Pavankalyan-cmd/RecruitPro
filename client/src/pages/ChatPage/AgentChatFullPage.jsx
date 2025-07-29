@@ -3,7 +3,11 @@ import ReactMarkdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
 import "./AgentChatFullPage.css";
 import { getAuth } from "firebase/auth";
-
+import { useParams } from "react-router-dom";
+import { chatTopMatches } from "../services/services";
+import { Avatar } from "@mui/material";
+import SmartToyRoundedIcon from "@mui/icons-material/SmartToyRounded";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 
 export default function AgentChatFullPage() {
@@ -12,6 +16,9 @@ export default function AgentChatFullPage() {
   const [loading, setLoading] = useState(false);
   const [theme, setTheme] = useState("light");
   const [userName, setUserName] = useState("User");
+  const { jd_id } = useParams();
+  const [userPhotoURL, setUserPhotoURL] = useState(null);
+
 
   const chatEndRef = useRef(null);
 
@@ -19,14 +26,16 @@ export default function AgentChatFullPage() {
     const savedTheme = localStorage.getItem("chatTheme");
     if (savedTheme) setTheme(savedTheme);
   }, []);
-  useEffect(() => {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (user?.displayName) {
-        setUserName(user.displayName);
-      }
-    }, []);
 
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+      if (user?.displayName) setUserName(user.displayName);
+      if (user?.photoURL) setUserPhotoURL(user.photoURL);
+    if (user?.displayName) {
+      setUserName(user.displayName);
+    }
+  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem("chatHistory");
@@ -35,17 +44,15 @@ export default function AgentChatFullPage() {
     } else {
       const welcomeMessage = {
         role: "ai",
-        content: `👋 Hello ${userName}, how can I help you with your expenses today?`,
+        content: `👋 Hello ${userName}, how can I help you with your top matched candidates today?`,
       };
       setChat([welcomeMessage]);
     }
   }, [userName]);
 
-
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat, loading]);
-
 
   useEffect(() => {
     localStorage.setItem("chatHistory", JSON.stringify(chat));
@@ -61,25 +68,23 @@ export default function AgentChatFullPage() {
     setInput("");
     setLoading(true);
 
-    // try {
-    //   const data = await sendAgentQuery({
-    //     query: input,
-    //     chat_history: updatedChat,
-    //   });
-
-    //   const aiMessage = { role: "ai", content: data.response };
-    //   setChat((prev) => [...prev, aiMessage]);
-    // } catch (error) {
-    //   console.error("API error:", error);
-    //   const fallback = {
-    //     role: "ai",
-    //     content: "⚠️ Sorry, I couldn't process that. Please try again.",
-    //   };
-    //   setChat((prev) => [...prev, fallback]);
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      const data = await chatTopMatches(jd_id, input);
+      const aiMessage = { role: "ai", content: data.response.response }; 
+      setChat((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("API error:", error);
+      const fallback = {
+        role: "ai",
+        content: "⚠️ Sorry, I couldn't process that. Please try again.",
+      };
+      setChat((prev) => [...prev, fallback]);
+    } finally {
+      setLoading(false);
+    }
   };
+
+
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -87,8 +92,6 @@ export default function AgentChatFullPage() {
       handleSend();
     }
   };
-
-
 
   return (
     <div className={`expensewise-fullpage-chat ${theme}`}>
@@ -98,7 +101,12 @@ export default function AgentChatFullPage() {
           <div key={idx} className={`expensewise-chat-msg ${msg.role}`}>
             {msg.role === "ai" ? (
               <>
-                <div className="expensewise-avatar">🤖</div>
+                <div className="expensewise-avatar">
+                  {" "}
+                  <Avatar className="avatar ai-avatar" variant="circular">
+                    <SmartToyRoundedIcon fontSize="small" />
+                  </Avatar>
+                </div>
                 <div className="expensewise-bubble ai">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
@@ -108,7 +116,16 @@ export default function AgentChatFullPage() {
                 <div className="expensewise-bubble user">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
-                <div className="expensewise-avataruser">🧑</div>
+                <div className="expensewise-avataruser">
+                  <Avatar
+                    className="avatar user-avatar"
+                    variant="circular"
+                    src={userPhotoURL || undefined}
+                    imgProps={{ referrerPolicy: "no-referrer" }}
+                  >
+                    {!userPhotoURL && <PersonRoundedIcon fontSize="small" />}
+                  </Avatar>
+                </div>
               </>
             )}
           </div>
@@ -129,7 +146,7 @@ export default function AgentChatFullPage() {
       <div className="expensewise-chat-footer">
         <input
           type="text"
-          placeholder="Ask something..."
+          placeholder="Ask something about the top matches..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
