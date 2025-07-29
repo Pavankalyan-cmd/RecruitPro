@@ -8,6 +8,10 @@ import { chatTopMatches } from "../services/services";
 import { Avatar } from "@mui/material";
 import SmartToyRoundedIcon from "@mui/icons-material/SmartToyRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"; 
+import { useNavigate } from "react-router-dom";
+import remarkGfm from "remark-gfm";
+
 
 
 export default function AgentChatFullPage() {
@@ -18,6 +22,8 @@ export default function AgentChatFullPage() {
   const [userName, setUserName] = useState("User");
   const { jd_id } = useParams();
   const [userPhotoURL, setUserPhotoURL] = useState(null);
+  const navigate = useNavigate();
+
 
 
   const chatEndRef = useRef(null);
@@ -76,7 +82,8 @@ export default function AgentChatFullPage() {
       console.error("API error:", error);
       const fallback = {
         role: "ai",
-        content: "⚠️ Sorry, I couldn't process that. Please try again.",
+        content:
+          " Apologies, something went wrong while processing your request. Please try again in a moment.",
       };
       setChat((prev) => [...prev, fallback]);
     } finally {
@@ -95,6 +102,16 @@ export default function AgentChatFullPage() {
 
   return (
     <div className={`expensewise-fullpage-chat ${theme}`}>
+      <div className="expensewise-chat-header">
+        <button
+          className="back-button"
+          onClick={() => navigate("/dashboard/job-descriptions")}
+        >
+          <ArrowBackIosNewIcon fontSize="small" />
+          Back
+        </button>
+      </div>
+
       <div className="expensewise-chat-body">
         <div className="expensewise-chat-username">Hey {userName}</div>
         {chat.map((msg, idx) => (
@@ -108,13 +125,17 @@ export default function AgentChatFullPage() {
                   </Avatar>
                 </div>
                 <div className="expensewise-bubble ai">
-                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {msg.content}
+                  </ReactMarkdown>
                 </div>
               </>
             ) : (
               <>
                 <div className="expensewise-bubble user">
-                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {msg.content}
+                  </ReactMarkdown>
                 </div>
                 <div className="expensewise-avataruser">
                   <Avatar
@@ -132,8 +153,12 @@ export default function AgentChatFullPage() {
         ))}
         {loading && (
           <div className="expensewise-chat-msg ai">
-            <div className="expensewise-avatar">🤖</div>
-            <div className="expensewise-bubble typing">
+            <div className="expensewise-avatar">
+              <Avatar className="avatar ai-avatar" variant="circular">
+                <SmartToyRoundedIcon fontSize="small" />
+              </Avatar>
+            </div>
+            <div className="expensewise-bubble ai typing">
               Typing<span className="dot">.</span>
               <span className="dot">.</span>
               <span className="dot">.</span>

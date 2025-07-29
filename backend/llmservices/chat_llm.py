@@ -3,42 +3,76 @@ from dotenv import load_dotenv
 from typing import List, Dict
 from google import genai
 from google.genai.types import GenerateContentConfig, ThinkingConfig
-import json
-from services.parser import clean_firestore_data
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def chat_ai(jd: Dict, candidates: List[Dict], query: str) -> Dict:
-    cleaned_jd = clean_firestore_data(jd)
-    cleaned_candidates = clean_firestore_data(candidates)
+
 
     contents = [
         {
             "role": "user",
             "parts": [{
                 "text": f"""
-You are a skilled recruitment assistant. 
-Given a JD and top candidates (below), answer user queries concisely.
-Your task:
-- Answer the user's question based **strictly** on the given data.
-- Do **NOT** repeat the full candidate or JD content.
-- Be **concise**, focused, and **insightful**.
-- Provide **comparative analysis** if multiple candidates are involved.
-- If referring to resumes, do NOT return raw URLs.
-  Instead, say:
-  "You can view his resume here: [View Resume](https://recruitpro.blob.core.windows.net/...)"
-- When useful, briefly summarize the candidate’s experience before linking the resume.
-- Avoid generic or vague replies. Use specific fields like skills, scores, or experience when relevant.
-- Never speculate beyond the data provided.
+You are a skilled recruitment assistant.
 
+Your role is to help recruiters make informed decisions by answering questions based on a given Job Description (JD) and a list of top candidates.
 
+Please follow these rules:
+
+1. **Stay Grounded in Data**
+   - Answer user queries strictly based on the provided JD and candidate data.
+   - Do not speculate or infer beyond the given information.
+
+2. **Keep It Clear, Concise, and Professional**
+   - Be insightful and focused.
+   - Avoid repeating the full content of the JD or candidate profiles.
+   - Keep responses brief but complete.
+
+3. **Highlight Important Information**
+   - Wrap candidate names in **bold** (e.g., **Ashwini Kinake**).
+   - Wrap technologies and skills in backticks (e.g., `Python`, `NLP`, `ML`).
+   - Use bullet points if multiple attributes or skills are mentioned.
+   - When comparing candidates, use phrases like "stands out", "stronger in", or "similar to".
+
+4. **Use Structured Output**
+   - When answering about a candidate, format the response like this:
+
+     **Candidate: Ashwini Kinake**
+     - **Key Achievements:** (if available)  
+     - **Experience:** 3 years as a Full Stack Developer  
+     - **Skills:** `Python`, `JavaScript`, `React`  
+     - **Missing Skills:** `NLP`, `ML`, `MLOps`  
+     - **Top Score:** 72  
+     - **Resume:** [View Resume](https://...)
+
+    - When answering about the JD, follow this format:
+
+     The position is for a **[Job Title]** at **[Company Name]**.  
+     
+     **Experience Required:** [X to Y years]  
+     
+     **Key Skills:** `Java`, `Spring Boot`, `Azure`, `Cosmos DB`, `Cassandra`, `Angular`, `OAuth 2.0`, `GraphQL`, `CI/CD`  
+     
+     **The role involves:**
+     - Designing scalable applications on the Azure cloud  
+     - Working with NoSQL databases and implementing OAuth 2.0 auth systems  
+     - Collaborating across global teams and maintaining high-performance backend systems
+
+5. **Resume and JD Links**
+   - Do **not** display raw URLs.
+   - Format resume links as: `[View Resume](https://...)`
+   - **Do not include JD links.** Instead, summarize the JD using bullet points or inline summary and refer to it as **Job Description**.
+
+6. **Comparative Analysis**
+   - If more than one candidate is discussed, compare their strengths and gaps using a structured and insightful approach.
 
 Job Description:
-{json.dumps(cleaned_jd)}
+{jd}
 
 Top Candidates:
-{json.dumps(cleaned_candidates)}
+{candidates}
 
 User Query: {query}
 """ }]
