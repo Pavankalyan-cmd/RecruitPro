@@ -22,6 +22,7 @@ def analyze_multiple_resumes_structured(job_text: str, candidates: List[Dict]) -
       "contact": { "type": "string" },
       "email": { "type": "string" },
       "education": { "type": "string" },
+      "location":{"type":"string"},
       "designation": { "type": "string" },
       "experience": { "type": "string" },
       "resume_url": { "type": "string" },
@@ -45,7 +46,7 @@ def analyze_multiple_resumes_structured(job_text: str, candidates: List[Dict]) -
       
     },
     "required": [
-      "uid", "candidate_id", "name", "contact",  "email", "education","experience",
+      "uid", "candidate_id", "name", "contact",  "email", "education","experience","location",
       "designation", "resume_url", "skills_score", "skills_explanation",
       "experience_score", "experience_explanation",
       "education_score", "education_explanation",
@@ -53,7 +54,7 @@ def analyze_multiple_resumes_structured(job_text: str, candidates: List[Dict]) -
       "skills_matched", "key_achievements"
     ],
     "propertyOrdering": [
-      "uid", "candidate_id", "name", "email", "contact","experience",
+      "uid", "candidate_id", "name", "email", "contact","experience","location",
       "education", "designation", "resume_url", "profile_type",
       "skills_score", "skills_explanation",
       "experience_score", "experience_explanation",

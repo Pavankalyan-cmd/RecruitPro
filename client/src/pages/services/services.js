@@ -53,7 +53,6 @@ export const getCandidateResumes = async () => {
         Authorization: `Bearer ${idToken}`,
       },
     });
-    console.log(response.data.candidates);
     return response.data.candidates; // Return just the list
   } catch (error) {
     console.error(
@@ -79,7 +78,6 @@ export const getJobDescriptions = async () => {
       },
     });
 
-    console.log(response.data.job_descriptions);
     return response.data.job_descriptions; // Return just the JD list
   } catch (error) {
     console.error(
@@ -167,7 +165,6 @@ export const getTopScoreCandidates = async (jd_id) => {
       Authorization: `Bearer ${idToken}`,
     },
   });
-  console.log(response.data)
   return response.data;
 };
 
@@ -188,7 +185,6 @@ export const fetchUserWeights = async () => {
   });
   
 
-  console.log(response.data)
   return response.data;
 };
 
@@ -235,6 +231,5 @@ export const chatTopMatches = async (jd_id, query) => {
       },
     }
   );
-   console.log("recives response from chatTopMatches",response.data)
   return response.data;
 };

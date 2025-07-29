@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogActions,
   Tooltip,
+  
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -194,29 +195,7 @@ export default function TopMatchesPage({ jd_id, onBack }) {
                 </Box>
 
                 <Box className="topmatch-analysis">
-                  <Box>
-                    <Typography variant="body2" sx={{ color: "#7a7a7a" }}>
-                      Key Strengths
-                    </Typography>
-                    <Box className="topmatch-tags">
-                      {c.key_strengths && c.key_strengths.length > 0 ? (
-                        c.key_strengths.map((str, idx) => (
-                          <Chip
-                            key={idx}
-                            label={str}
-                            className="topmatch-tag"
-                          />
-                        ))
-                      ) : (
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "#9e9e9e", mt: 1 }}
-                        >
-                          N/A
-                        </Typography>
-                      )}
-                    </Box>
-                  </Box>
+
 
                   <Box>
                     <Typography variant="body2" sx={{ color: "#7a7a7a" }}>

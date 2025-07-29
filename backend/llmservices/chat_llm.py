@@ -40,7 +40,9 @@ Please follow these rules:
    - When answering about a candidate, format the response like this:
 
      **Candidate: Ashwini Kinake**
-     - **Key Achievements:** (if available)  
+     - **Key Achievements:**  
+        - Led migration to a modern tech stack across 3 projects
+        - Improved API response times by 40% through backend optimization 
      - **Experience:** 3 years as a Full Stack Developer  
      - **Skills:** `Python`, `JavaScript`, `React`  
      - **Missing Skills:** `NLP`, `ML`, `MLOps`  

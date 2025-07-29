@@ -40,7 +40,7 @@
   overflow-y: auto;
   margin: 0 auto;
   margin-top: 5%;
-  width: 70%;
+  width: 90%;
   background: inherit;
 }
 
@@ -125,7 +125,7 @@
   padding: 1rem 1rem;
   margin: 0 auto;
   margin-bottom: 6% !important;
-  width: 60%;
+  width: 80%;
   background-color: #fff;
   border-radius: 50px;
   box-shadow: 25px 25px 50px #bebebe, -25px -25px 50px #ffffff;
