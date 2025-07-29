@@ -250,6 +250,13 @@ export default function AgentChatFullPage() {
         onClose={handleCloseResumeDialog}
         fullWidth
         maxWidth="md"
+        PaperProps={{
+          sx: {
+            color: "#222",
+            fontSize: "1.13rem",
+            borderRadius: 5,
+          },
+        }}
       >
         <DialogTitle
           sx={{

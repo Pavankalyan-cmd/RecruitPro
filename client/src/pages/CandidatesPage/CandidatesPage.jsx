@@ -13,11 +13,14 @@ import {
   Tooltip,
   Skeleton,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 
@@ -374,46 +377,52 @@ export default function CandidatesPage() {
       )}
 
       {/* Resume Preview Modal */}
-      <Modal
+      <Dialog
         open={openModal}
         onClose={() => setOpenModal(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{ timeout: 500 }}
+        fullWidth
+        maxWidth="md"
+        PaperProps={{
+          sx: {
+            color: "#222",
+            fontSize: "1.13rem",
+            borderRadius: 5,
+          },
+        }}
       >
-        <Box
+        <DialogTitle
           sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "80%",
-            height: "80%",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 2,
+            fontSize: "1.08rem",
+            color: "white",
+            backgroundColor: "#4b32c3",
           }}
         >
-          <IconButton
-            onClick={() => setOpenModal(false)}
-            sx={{ position: "absolute", top: 8, right: 8, zIndex: 1 }}
-          >
-            <CloseIcon />
-          </IconButton>
+          Candidate Resume
+        </DialogTitle>
+
+        <DialogContent dividers>
           {selectedResumeUrl ? (
             <iframe
               src={selectedResumeUrl}
               title="Resume Preview"
               width="100%"
-              height="100%"
+              height="600px"
               style={{ border: "none" }}
             />
           ) : (
             <Typography>Loading resume...</Typography>
           )}
-        </Box>
-      </Modal>
+        </DialogContent>
 
+        <DialogActions>
+          <Button
+            onClick={() => setOpenModal(false)}
+            sx={{ color: "#6c47ff", fontWeight: 600 }}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
       {/* Delete Confirmation Modal */}
       <Modal open={deleteOpen} onClose={cancelDelete}>
         <Box

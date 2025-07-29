@@ -12,11 +12,14 @@ import {
   Backdrop,
   Skeleton,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import CloseIcon from "@mui/icons-material/Close";
 import {
   getJobDescriptions,
   uploadJobDescriptions,
@@ -36,12 +39,23 @@ export default function JobDescriptionsPage() {
   const [selectedJD, setSelectedJD] = useState(null);
   const [jdViewUrl, setJdViewUrl] = useState(null);
   const [jdModalOpen, setJdModalOpen] = useState(false);
-  const [showFullJD, setShowFullJD] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [expandedJDs, setExpandedJDs] = useState(new Set());
+  
 
   const hasFetched = useRef(false);
-
+const toggleJDExpansion = (jd_id) => {
+  setExpandedJDs((prev) => {
+    const newSet = new Set(prev);
+    if (newSet.has(jd_id)) {
+      newSet.delete(jd_id);
+    } else {
+      newSet.add(jd_id);
+    }
+    return newSet;
+  });
+};
   const fetchJDs = async () => {
     try {
       setLoading(true);
@@ -58,6 +72,7 @@ export default function JobDescriptionsPage() {
     if (hasFetched.current) return;
     hasFetched.current = true;
     fetchJDs();
+    
   }, []);
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -326,12 +341,15 @@ export default function JobDescriptionsPage() {
                                 </Typography>
                               </Box>
 
-                              <Typography variant="body2" className="jd-desc">
-                                {showFullJD
-                                  ? job.description
-                                  : `${job.description.slice(0, 200)}${
-                                      job.description.length > 200 ? "..." : ""
-                                    }`}
+                              <Typography
+                                variant="body2"
+                                className={`jd-desc ${
+                                  expandedJDs.has(job.jd_id)
+                                    ? "expanded"
+                                    : "clamped"
+                                }`}
+                              >
+                                {job.description}
                               </Typography>
 
                               {job.description.length > 300 && (
@@ -342,9 +360,11 @@ export default function JobDescriptionsPage() {
                                     cursor: "pointer",
                                     mt: 0.5,
                                   }}
-                                  onClick={() => setShowFullJD(!showFullJD)}
+                                  onClick={() => toggleJDExpansion(job.jd_id)}
                                 >
-                                  {showFullJD ? "Show less" : "Show more"}
+                                  {expandedJDs.has(job.jd_id)
+                                    ? "Show less"
+                                    : "Show more"}
                                 </Typography>
                               )}
 
@@ -436,51 +456,54 @@ export default function JobDescriptionsPage() {
       )}
 
       {/* JD Modal */}
-      <Modal
+
+      <Dialog
         open={jdModalOpen}
         onClose={() => setJdModalOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{ timeout: 500 }}
+        fullWidth
+        maxWidth="md"
+        PaperProps={{
+          sx: {
+            color: "#222",
+            fontSize: "1.13rem",
+            borderRadius: 5,
+          },
+        }}
       >
-        <Box
+        <DialogTitle
           sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "80%",
-            height: "80%",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 2,
+            fontSize: "1.08rem",
+            color: "white",
+            backgroundColor: "#4b32c3",
           }}
         >
-          <IconButton
-            onClick={() => setJdModalOpen(false)}
-            sx={{
-              position: "absolute",
-              top: 8,
-              right: 8,
-              zIndex: 1,
-              color: "grey.700",
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
+          Job Description
+        </DialogTitle>
+
+        <DialogContent dividers>
           {jdViewUrl ? (
             <iframe
               src={jdViewUrl}
-              title="JD Preview"
               width="100%"
-              height="100%"
+              height="600px"
               style={{ border: "none" }}
+              title="JD Viewer"
             />
           ) : (
             <Typography>Loading job description...</Typography>
           )}
-        </Box>
-      </Modal>
+        </DialogContent>
+
+        <DialogActions>
+          <Button
+            onClick={() => setJdModalOpen(false)}
+            sx={{ color: "#6c47ff", fontWeight: 600 }}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {/* Delete Confirmation Modal */}
       <Modal open={deleteOpen} onClose={cancelDelete}>
         <Box

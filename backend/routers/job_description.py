@@ -7,7 +7,6 @@ from google import genai
 import os
 import json
 from dotenv import load_dotenv
-import re
 from urllib.parse import urlparse
 import uuid
 from storage.azure import upload_resume_to_azure ,delete_resume_from_azure
