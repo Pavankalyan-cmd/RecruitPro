@@ -218,12 +218,10 @@ async def get_job_descriptions(request: Request):
     
 
 
-
 @router.delete("/job-description/{jd_id}")
 async def delete_job_description(request: Request, jd_id: str):
     try:
         uid = verify_firebase_token(request)
-
 
         jd_doc_ref = db.collection("users").document(uid).collection("job_descriptions").document(jd_id)
         doc_snapshot = jd_doc_ref.get()
@@ -233,18 +231,23 @@ async def delete_job_description(request: Request, jd_id: str):
 
         jd_data = doc_snapshot.to_dict()
 
-       
+        # Delete the associated file from Azure, if any
         jd_url = jd_data.get("jd_url")
         if jd_url:
             parsed_url = urlparse(jd_url)
             blob_path = parsed_url.path.lstrip(f"/{os.getenv('AZURE_CONTAINER_NAME')}/")
             delete_resume_from_azure(blob_path)
-        
+
+        # Delete JD document
         jd_doc_ref.delete()
+
+        # Delete associated top score document
+        top_score_jd_ref = db.collection("users").document(uid).collection("top_score").document(jd_id)
+        top_score_jd_ref.delete()
 
         return {
             "status": "success",
-            "message": f"Job Description {jd_id} and associated file deleted successfully"
+            "message": f"Job Description {jd_id}, associated file, and top score deleted successfully"
         }
 
     except Exception as e:

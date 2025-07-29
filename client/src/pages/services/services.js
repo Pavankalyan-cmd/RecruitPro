@@ -13,7 +13,7 @@ export const candidateResume = async (resumeFiles) => {
 
   const formData = new FormData();
   resumeFiles.forEach((file) => {
-    formData.append("resumes", file); // ⬅️ 'resumes' matches the FastAPI parameter
+    formData.append("resumes", file);
   });
 
   try {
@@ -53,7 +53,6 @@ export const getCandidateResumes = async () => {
         Authorization: `Bearer ${idToken}`,
       },
     });
-    console.log(response.data.candidates);
     return response.data.candidates; // Return just the list
   } catch (error) {
     console.error(
@@ -63,10 +62,6 @@ export const getCandidateResumes = async () => {
     throw error;
   }
 };
-
-
-
-
 
 export const getJobDescriptions = async () => {
   const auth = getAuth();
@@ -83,7 +78,6 @@ export const getJobDescriptions = async () => {
       },
     });
 
-    console.log(response.data.job_descriptions);
     return response.data.job_descriptions; // Return just the JD list
   } catch (error) {
     console.error(
@@ -171,7 +165,6 @@ export const getTopScoreCandidates = async (jd_id) => {
       Authorization: `Bearer ${idToken}`,
     },
   });
-  console.log(response.data)
   return response.data;
 };
 
@@ -192,7 +185,6 @@ export const fetchUserWeights = async () => {
   });
   
 
-  console.log(response.data)
   return response.data;
 };
 
@@ -215,5 +207,29 @@ export const updateUserWeights = async (role, newWeights) => {
     }
   );
 
+  return response.data;
+};
+
+
+export const chatTopMatches = async (jd_id, query) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) throw new Error("User not authenticated");
+
+  const idToken = await user.getIdToken();
+
+  const response = await axios.post(
+    `${API_BASE}/api/chat-top-matches`,
+    {
+      jd_id,
+      query,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    }
+  );
   return response.data;
 };
