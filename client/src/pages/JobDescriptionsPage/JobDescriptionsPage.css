@@ -319,3 +319,20 @@
     padding: 0 16px 12px 16px;
   }
 }
+.jd-desc.clamped {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  max-height: 4.5em;
+  line-height: 1.5em;
+}
+
+.jd-desc.expanded {
+  white-space: pre-wrap;
+  overflow: visible;
+  max-height: none;
+  line-height: 1.6em;
+}

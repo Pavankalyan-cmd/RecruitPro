@@ -91,8 +91,8 @@ export default function TopMatchesPage({ jd_id, onBack }) {
         <Button
           variant="outlined"
           className="match-btn"
-          onClick={()=>{
-            handleChatPage()
+          onClick={() => {
+            handleChatPage();
           }}
         >
           Chat with Ai
@@ -195,8 +195,6 @@ export default function TopMatchesPage({ jd_id, onBack }) {
                 </Box>
 
                 <Box className="topmatch-analysis">
-
-
                   <Box>
                     <Typography variant="body2" sx={{ color: "#7a7a7a" }}>
                       Skills Match
@@ -260,8 +258,24 @@ export default function TopMatchesPage({ jd_id, onBack }) {
         onClose={handleCloseResumeDialog}
         fullWidth
         maxWidth="md"
+        PaperProps={{
+          sx: {
+            color: "#222",
+            fontSize: "1.13rem",
+            borderRadius: 5,
+        
+          },
+        }}
       >
-        <DialogTitle>Candidate Resume</DialogTitle>
+        <DialogTitle
+          sx={{
+            fontSize: "1.08rem",
+            color: "white",
+            backgroundColor: "#4b32c3",
+          }}
+        >
+          Candidate Resume
+        </DialogTitle>
         <DialogContent dividers>
           {selectedResumeUrl ? (
             <iframe
@@ -276,7 +290,12 @@ export default function TopMatchesPage({ jd_id, onBack }) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseResumeDialog}>Close</Button>
+          <Button
+            onClick={handleCloseResumeDialog}
+            sx={{ color: "#6c47ff", fontWeight: 600 }}
+          >
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
 
